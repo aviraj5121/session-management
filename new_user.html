@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Sign Up</title>
+</head>
+<style>
+    body {
+  background-color: #f2f2f2;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3);
+}
+
+h1 {
+  text-align: center;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+button[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #3e8e41;
+}
+</style>
+<body>
+  <h1>Sign Up</h1>
+  <form>
+    
+    <label for="name">Name :</label>
+    <input type="text" id="name" name="name"><br>
+    
+    <label for="Email ">eamil id</label>
+    <input type="email" id="email" name="email"><br>
+    
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username"><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password"><br>
+
+    <label for="confirm-password">Confirm Password:</label>
+    <input type="password" id="confirm-password" name="confirm-password"><br>
+
+    <button type="submit">Sign Up</button>
+  </form>
+  <a href="/index.html">Already have an account? Log in</a>
+
+  <script>
+    const form = document.querySelector('form');
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const username = document.querySelector('#username').value;
+      const password = document.querySelector('#password').value;
+      const confirmPassword = document.querySelector('#confirm-password').value;
+
+      if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+      }
+
+      const response = await fetch('/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(data.message);
+        window.location.href = '/login';
+      } else {
+        alert(data.message);
+      }
+    });
+  </script>
+</body>
+</html>

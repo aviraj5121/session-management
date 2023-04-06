@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Page</title>
+  <style>
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+    
+    input {
+        margin: 10px;
+        padding: 5px;
+        width: 200px;
+        border-radius: 5px;
+        border: 1px solid black;
+    }
+    
+    button {
+        margin: 10px;
+        padding: 5px;
+        width: 100px;
+        border-radius: 5px;
+        border: 1px solid black;
+        background-color: #4CAF50;
+        color: white;
+    }
+    
+    button:hover {
+        cursor: pointer;
+        background-color: #3e8e41;
+    }
+</style>
+</head>
+<body>
+    <h1>Login Page</h1>
+    <form>
+    <input type="text" placeholder="Username" id="username">
+    <input type="password" placeholder="Password" id="password">
+    <button type="submit" id="login-btn">Login</button>
+    </form>
+    <button id="signup-btn">Sign Up</button>
+    <script>
+        const loginForm = document.querySelector('form');
+        const usernameInput = document.querySelector('#username');
+        const passwordInput = document.querySelector('#password');
+        const loginBtn = document.querySelector('#login-btn');
+        const signupBtn = document.querySelector('#signup-btn');
+        signupBtn.addEventListener('click', () => {
+        window.location.href = 'new_user.html';
+        });
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+            body: JSON.stringify({ username, password })
+        });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        // Save JWT token to local storage
+        localStorage.setItem('token', data.token);
+        
+        // Redirect to dashboard
+        window.location.href = '/dashboard';
+      } else {
+        // Display error message
+        alert(data.message);
+      }
+    });
+    
+    signupBtn.addEventListener('click', async (event) => {
+      event.preventDefault();
+      
+      const username = usernameInput.value;
+      const password = passwordInput.value;
+      
+      const response = await fetch('/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        alert(data.message);
+      } else {
+        alert(data.message);
+      }
+    });
+  </script>
+</body>
+</html>
