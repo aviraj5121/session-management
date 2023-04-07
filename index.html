@@ -33,70 +33,42 @@
         cursor: pointer;
         background-color: #3e8e41;
     }
-</style>
+  </style>
 </head>
 <body>
-    <h1>Login Page</h1>
-    <form>
-    <input type="text" placeholder="Username" id="username">
-    <input type="password" placeholder="Password" id="password">
+  <h1>Login Page</h1>
+  <form id="login-form">
+    <input type="text" placeholder="Username" id="username-input">
+    <input type="password" placeholder="Password" id="password-input">
     <button type="submit" id="login-btn">Login</button>
-    </form>
-    <button id="signup-btn">Sign Up</button>
-    <script>
-        const loginForm = document.querySelector('form');
-        const usernameInput = document.querySelector('#username');
-        const passwordInput = document.querySelector('#password');
-        const loginBtn = document.querySelector('#login-btn');
-        const signupBtn = document.querySelector('#signup-btn');
-        signupBtn.addEventListener('click', () => {
-        window.location.href = 'new_user.html';
-        });
-        loginForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const username = usernameInput.value;
-            const password = passwordInput.value;
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-            body: JSON.stringify({ username, password })
-        });
-      
-      const data = await response.json();
-      
-      if (response.ok) {
-        // Save JWT token to local storage
-        localStorage.setItem('token', data.token);
-        
-        // Redirect to dashboard
-        window.location.href = '/dashboard';
-      } else {
-        // Display error message
-        alert(data.message);
-      }
-    });
-    
-    signupBtn.addEventListener('click', async (event) => {
+  </form>
+  <button onclick="location.href='/new_user.html'">Sign Up</button>
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const usernameInput = document.getElementById('username-input');
+    const passwordInput = document.getElementById('password-input');
+    loginForm.addEventListener('submit', async (event) => {
       event.preventDefault();
-      
       const username = usernameInput.value;
       const password = passwordInput.value;
-      
-      const response = await fetch('/api/signup', {
+      const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ username, password })
       });
-      
+
       const data = await response.json();
-      
+
       if (response.ok) {
-        alert(data.message);
+        // Save JWT token to local storage
+        localStorage.setItem('token', data.token);
+        
+        // Redirect to dashboard
+        window.location.href = '/dashboard.html';
       } else {
+        // Display error message
         alert(data.message);
       }
     });

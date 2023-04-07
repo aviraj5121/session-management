@@ -28,7 +28,8 @@ label {
 }
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="email"] {
   width: 100%;
   padding: 10px;
   border-radius: 5px;
@@ -56,7 +57,7 @@ button[type="submit"]:hover {
     <label for="name">Name :</label>
     <input type="text" id="name" name="name"><br>
     
-    <label for="Email ">eamil id</label>
+    <label for="Email ">Email :</label>
     <input type="email" id="email" name="email"><br>
     
     <label for="username">Username:</label>
@@ -69,17 +70,22 @@ button[type="submit"]:hover {
     <input type="password" id="confirm-password" name="confirm-password"><br>
 
     <button type="submit">Sign Up</button>
-  </form>
-  <a href="/index.html">Already have an account? Log in</a>
+</form>
+<a href="/index.html">Already have an account? Log in</a>
 
-  <script>
+
+<script>
+
+
+
     const form = document.querySelector('form');
     form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-
-      const username = document.querySelector('#username').value;
-      const password = document.querySelector('#password').value;
-      const confirmPassword = document.querySelector('#confirm-password').value;
+        event.preventDefault();
+        const name = document.querySelector('#name').value;
+        const email = document.querySelector('#email').value;
+        const username = document.querySelector('#username').value;
+        const password = document.querySelector('#password').value;
+        const confirmPassword = document.querySelector('#confirm-password').value;
 
       if (password !== confirmPassword) {
         alert('Passwords do not match');
@@ -91,14 +97,14 @@ button[type="submit"]:hover {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ name , email, username, password })
       });
 
       const data = await response.json();
 
       if (response.ok) {
         alert(data.message);
-        window.location.href = '/login';
+        window.location.href = '/dashboard.html';
       } else {
         alert(data.message);
       }

@@ -1,0 +1,31 @@
+<!-- dashboard.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <script>
+        // Fetch user data from dashboard route
+        fetch('/dashboard', {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        })
+        .then(res => res.json())
+        .then(data => {
+          // Display user name and email on page
+            const userInfo = document.getElementById('user-info');
+            userInfo.innerHTML = `Name: ${data.name}<br>Email: ${data.email}`;
+        })
+        .catch(err => console.error(err));
+        </script>
+</head>
+<body>
+<h1>Welcome to your dashboard</h1>
+<div id="user-info">
+    <% users.forEach(function(user) { %>
+      <ul>
+        <li>Name: <%= user.name %></li>
+        <li>Email: <%= user.email %></li>
+      </ul>
+    <% }); %>
+  </div>
+</body>
+</html>
