@@ -40,13 +40,6 @@ const User = mongoose.model('User', userSchema);
 const JWT_SECRET = 'mysecretkey';
 
 // Define admin user
-const adminUser = new User({
-  name: 'Admin',
-  email: 'admin@example.com',
-  username: 'admin',
-  password: 'adminpassword',
-  isAdmin: true
-});
 
 
 
@@ -77,8 +70,6 @@ app.post('/api/login', async (req, res) => {
 app.get('/index.html', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
-
-
 
 // Serve the new_user.html file when the URL "/new_user.html" is accessed
 app.get('/new_user.html', (req, res) => {
@@ -128,26 +119,21 @@ app.get('/dashboard.html', (req, res) => {
   res.sendFile(__dirname + '/dashboard.html');
 });
 
-// define the dashboard route 
 app.get('/dashboard', authenticateToken, async (req, res) => {
   try {
-    // Check if the user is an admin
+    // Retrieve the user information from the database
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     const decodedToken = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(decodedToken.id);
-    if (!user.isAdmin) {
-      return res.status(403).send('Forbidden');
-    }
-    // Retrieve all users from the database
-    const users = await User.find({}, { name: 1, email: 1, _id: 0 });
-    // Render the dashboard page and pass the user data as a parameter
-    res.render('dashboard', { users });
+    const user = await User.findById(decodedToken.id, { name: 1, email: 1, _id: 0 });
+    // Render the dashboard HTML file and pass the user information as a parameter
+    res.json({ name: user.name, email: user.email });
   } catch (error) {
     res.status(500).send('Internal server error');
   }
 });
-// Start server
+
+//Start server
 app.listen(3002, () => {
   console.log('Server listening on port 3002...');
 });
