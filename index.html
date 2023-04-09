@@ -147,18 +147,19 @@ button{
 
 <form>
     <h3>Login Here</h3>
-  <form id="login-form">
-    <input type="text" placeholder="Username" id="username-input">
-    <input type="password" placeholder="Password" id="password-input">
-    <button type="submit" id="login-btn">Login</button>
-  </form>
+    <form id="login-form">
+      <input type="text" placeholder="Username" id="username-input">
+      <input type="password" placeholder="Password" id="password-input">
+      <button type="submit" id="login-btn">Login</button>
+    </form>
   <button onclick="location.href='/new_user.html'" id="signup">Sign Up</button>
   <script>
-    const loginForm = document.getElementById('login-form');
+    const loginBtn = document.getElementById("login-btn");
     const usernameInput = document.getElementById('username-input');
     const passwordInput = document.getElementById('password-input');
-    loginForm.addEventListener('submit', async (event) => {
+    loginBtn.addEventListener('click', async (event) => {
       event.preventDefault(); 
+      console.log("in click")
       const username = usernameInput.value;
       const password = passwordInput.value;
       const response = await fetch('/api/login', {

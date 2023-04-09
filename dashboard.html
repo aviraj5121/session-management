@@ -1,40 +1,31 @@
-<!-- dashboard.html -->
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Dashboard</title>
+  </head>
+  <body onload="loadDashboardContent()">
+    <h1>Welcome to the dashboard!</h1>
+    <div id="dashboard-content"></div>
     <script>
-        // Fetch user data from dashboard route
-        fetch('/dashboard', {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      // Retrieve the dashboard content from the server using AJAX
+      function loadDashboardContent() {
+        fetch("/dashboard", {
+          headers: {
+            "Authorization": "Bearer " + localStorage.getItem("token")
+          }
         })
-        .then(res => res.json())
+        .then(response => response.json())
         .then(data => {
-          // Display user name and email on page
-            const userInfo = document.getElementById('user-info');
-            userInfo.innerHTML = `Name: ${data.name}<br>Email: ${data.email}`;
-        })
-        .catch(err => console.error(err));
-        </script>
-</head>
-<body>
-<h1>Welcome to your dashboard</h1>
-<div id="user-info">
-  <h1>Welcome to the dashboard</h1>
+          console.log(data);
 
-  </div>
-  <script>
-    fetch('/dashboard', {
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    })
-    .then(res => res.json())
-    .then(data => {
-      // Display user name and email on page
-      const userInfo = document.getElementById('user-info');
-      userInfo.innerHTML = `Name: ${data.name}<br>Email: ${data.email}`;
-    })
-    .catch(err => console.error(err));
-  </script>
-  </script>
-</body>
+          // Display the user data on the page
+          var dashboardContent = "<h2>Your Profile:</h2><ul><li>Name: " + data.name + "</li><li>Email: " + data.email + "</li></ul>";
+          document.getElementById("dashboard-content").innerHTML = dashboardContent;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+      }
+    </script>
+  </body>
 </html>

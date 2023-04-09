@@ -119,21 +119,45 @@ app.get('/dashboard.html', (req, res) => {
   res.sendFile(__dirname + '/dashboard.html');
 });
 
+// define the dashboard route 
 app.get('/dashboard', authenticateToken, async (req, res) => {
   try {
+    console.log('User authenticated'); // Log authentication success
+
     // Retrieve the user information from the database
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
+    console.log('Token:', token); // Log the received token
     const decodedToken = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(decodedToken.id, { name: 1, email: 1, _id: 0 });
-    // Render the dashboard HTML file and pass the user information as a parameter
-    res.json({ name: user.name, email: user.email });
+    console.log('Decoded token:', decodedToken); // Log the decoded token
+    
+    // Check if the user is an admin
+    const user = await User.findById(decodedToken.id);
+    if (user.isAdmin) {
+      console.log('User is an admin'); // Log admin status
+
+      // Fetch all user details from the database
+      const allUsers = await User.find({}, { name: 1, email: 1, _id: 0 });
+      console.log('All users:', allUsers); // Log all user data
+
+      // Send all user details as a response
+      res.json(allUsers);
+    } else {
+      // If user is not an admin, send only the user's own details as a response
+      const user = await User.findById(decodedToken.id, { name: 1, email: 1, _id: 0 });
+      console.log('User:', user); // Log the user data
+      res.json(user);
+    }
   } catch (error) {
+    console.error(error);
     res.status(500).send('Internal server error');
   }
 });
 
-//Start server
+
+
+
+// Start server
 app.listen(3002, () => {
   console.log('Server listening on port 3002...');
 });
