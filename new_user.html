@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
   <meta charset="utf-8">
   <title>Sign Up</title>
 </head>
@@ -49,7 +53,7 @@ bottom: -270px;
 form{
 margin-top: 100px;
 margin-bottom: 100px;
-height: 900px;
+height: 950px;
 width: 700px;
 background-color: rgba(255,255,255,0.13);
 position: absolute;
@@ -133,11 +137,30 @@ margin-right: 4px;
 {
   position: absolute;
   transform: translate(-50%,-50%);
-  top: 100%;
+  top: 1000px;
   left: 50%;
   width: 630px;
   height: 50px;
   border-color: white;
+}
+
+.material-symbols-outlined {
+  position: absolute;
+  left: 620px;
+  bottom: 365px;
+  cursor: pointer;
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
+#eye-icon1
+{
+  position: absolute;
+  left: 620px;
+  bottom: 235px;
+  cursor: pointer;
 }
 </style>
 <body>
@@ -159,20 +182,39 @@ margin-right: 4px;
     <input type="text" id="username" name="username"><br>
 
     <label for="password">Password:</label>
-    <input type="password" id="password" name="password"><br>
+    <input type="password" id="password" name="password" ><br>
+    <span class="material-symbols-outlined" id="eye-icon">visibility</span>
 
     <label for="confirm-password">Confirm Password:</label>
     <input type="password" id="confirm-password" name="confirm-password"><br>
-
+    <span class="material-symbols-outlined" id="eye-icon1">visibility</span>
+    
+    
     <button type="submit">Sign Up</button>
 </form>
 <button onclick="location.href='/index.html'" class="login">Already have an account </button>
-
-
 <script>
+  var passwordField = document.getElementById('password');
+  var eyeIcon = document.querySelector('#eye-icon');
+  eyeIcon.addEventListener('click', function() {
+  console.log("eye")
+    if (passwordField.type === 'password') {
+    passwordField.type = 'text';
+  } else {
+    passwordField.type = 'password';
+  }
+});
 
-
-
+var passwordconfrimField = document.getElementById('confirm-password');
+  var eyeIcon = document.querySelector('#eye-icon1');
+  eyeIcon.addEventListener('click', function() {
+  console.log("eye")
+    if (passwordconfrimField.type === 'password') {
+    passwordconfrimField.type = 'text';
+  } else {
+    passwordconfrimField.type = 'password';
+  }
+});
     const form = document.querySelector('form');
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -181,12 +223,10 @@ margin-right: 4px;
         const username = document.querySelector('#username').value;
         const password = document.querySelector('#password').value;
         const confirmPassword = document.querySelector('#confirm-password').value;
-
       if (password !== confirmPassword) {
         alert('Passwords do not match');
         return;
       }
-
       const response = await fetch('/api/signup', {
         method: 'POST',
         headers: {
@@ -194,9 +234,7 @@ margin-right: 4px;
         },
         body: JSON.stringify({ name , email, username, password })
       });
-
       const data = await response.json();
-
       if (response.ok) {
         alert(data.message);
         window.location.href = '/dashboard.html';

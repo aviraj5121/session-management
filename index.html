@@ -6,7 +6,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <style media="screen">
       *,
 *:before,
@@ -138,6 +138,17 @@ button{
     width: 77%;
     height: 12%;
 }
+.material-symbols-outlined {
+  position: absolute;
+  left: 320px;
+  bottom: 275px;
+  cursor: pointer;
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
   </style>
 </head>
 <body>
@@ -150,10 +161,21 @@ button{
     <form id="login-form">
       <input type="text" placeholder="Username" id="username-input">
       <input type="password" placeholder="Password" id="password-input">
+      <span class="material-symbols-outlined" id="eye-icon">visibility</span>
       <button type="submit" id="login-btn">Login</button>
     </form>
   <button onclick="location.href='/new_user.html'" id="signup">Sign Up</button>
   <script>
+      var passwordField = document.getElementById('password-input');
+      var eyeIcon = document.querySelector('#eye-icon');
+      eyeIcon.addEventListener('click', function() {
+      console.log("eye")
+      if (passwordField.type === 'password') {
+      passwordField.type = 'text';
+      } else {
+      passwordField.type = 'password';
+      }
+      });
     const loginBtn = document.getElementById("login-btn");
     const usernameInput = document.getElementById('username-input');
     const passwordInput = document.getElementById('password-input');
