@@ -2,6 +2,46 @@
 <html>
   <head>
     <title>Dashboard</title>
+    <style>
+      
+      h1{
+        color: white;
+        text-align: center;
+      }
+      body{
+      background-color: #080710;
+      }
+      table {
+        height: auto;
+      width: 400px;
+      background-color: rgba(255,255,255,0.13);
+      position: absolute;
+      transform: translate(-50%,-50%);
+      top: 50%;
+      left: 50%;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,255,255,0.1);
+      box-shadow: 0 0 40px rgba(8,7,16,0.6);
+      padding: 50px 35px;
+        border-collapse: collapse;
+
+      }
+
+      th, td {
+        text-decoration-color: white;
+        text-align: left;
+        padding: 8px;
+        color: white;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        text-decoration-color: white;
+        background-color: rgba(255,255,255,0.13);
+        color: white;
+      }
+    </style>
   </head>
   <body onload="loadDashboardContent()">
     <h1>Welcome to the dashboard!</h1>
@@ -9,33 +49,43 @@
     <script>
       // Retrieve the dashboard content from the server using AJAX
       function loadDashboardContent() {
-  fetch("/dashboard", {
-    headers: {
-      "Authorization": "Bearer " + localStorage.getItem("token")
-    }
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log(data);
+        fetch("/dashboard", {
+          headers: {
+            "Authorization": "Bearer " + localStorage.getItem("token")
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
 
-    // If the data is an array, display all users' data
-    if (Array.isArray(data)) {
-      var dashboardContent = "<h2>All Users:</h2><ul>";
-      data.forEach(user => {
-        dashboardContent += "<li>Name: " + user.name + ", Email: " + user.email + "</li>";
-      });
-      dashboardContent += "</ul>";
-    } else { // Otherwise, display the logged-in user's data
-      var dashboardContent = "<h2>Your Profile:</h2><ul><li>Name: " + data.name + "<br></li><li>Email: " + data.email + "</li></ul>";
-    }
+          // Generate HTML table based on the data received
+          var dashboardContent = "<table><thead><tr>";
+          if (Array.isArray(data)) {
+            dashboardContent += "<th>Name</th><th>Username</th><th>Email</th>";
+          } else {
+            dashboardContent += "<th>Property</th><th>Value</th>";
+          }
+          dashboardContent += "</tr></thead><tbody>";
 
-    document.getElementById("dashboard-content").innerHTML = dashboardContent;
-  })
-  .catch(error => {
-    console.error(error);
-  });
-}
+          if (Array.isArray(data)) {
+            data.forEach(user => {
+              dashboardContent += "<tr><td>" + user.name + "</td><td>" + user.username + "</td><td>" + user.email + "</td></tr>";
+            });
+          } else {
+            Object.keys(data).forEach(key => {
+              dashboardContent += "<tr><td>" + key + "</td><td>" + data[key] + "</td></tr>";
+            });
+          }
 
+          dashboardContent += "</tbody></table>";
+
+          // Set the generated HTML as the content of the dashboard div
+          document.getElementById("dashboard-content").innerHTML = dashboardContent;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+      }
     </script>
   </body>
 </html>
