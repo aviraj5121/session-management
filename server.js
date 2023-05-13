@@ -69,7 +69,9 @@ app.get('/new_user.html', (req, res) => {
   res.sendFile(__dirname + '/new_user.html');
 });
 // Serve the new_user.html file when the URL "/new_user.html" is accessed
-
+app.get('/login.js', (req, res) => {
+  res.sendFile(__dirname + '/login.js');
+});
 
 // Define login route
 app.post('/api/login', async (req, res) => {
