@@ -30,7 +30,7 @@
       }
     });
 
-function handleGoogleAuthSuccess(idToken) {
+    function handleGoogleAuthSuccess(idToken) {
         // Send the ID token to the backend
         console.log("working the api");
         fetch('/api/google', {
@@ -42,26 +42,22 @@ function handleGoogleAuthSuccess(idToken) {
         })
         .then(response => {
             if (response.ok) {
+                console.log("heiii")
                 return response.json();
             } else {
                 throw new Error('Network response was not ok');
             }
         })
         .then(data => {
-            console.log(data.message);
-            if (data.token) {
-                alert(data.message);
-                window.location.href = '/dashboard.html';
-            } else {
-                alert('There was a problem with the authentication');
-            }
+            const token = data.token;
+            localStorage.setItem('token', token);
+            window.location.href = '/dashboard.html';
         })
         .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
+            console.log('There was a problem with the fetch operation:', error);
             alert('There was a problem with the fetch operation');
         });
     }
-    
     function handleCredentialResponse(response) {
         var token = response.credential
         handleGoogleAuthSuccess(token);

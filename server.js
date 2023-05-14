@@ -181,11 +181,20 @@ app.post('/api/google', async (req, res) => {
   console.log(email, name, username);
   let user = await User.findOne({ email });
   if (!user) {
+    const generatePassword = () => {
+      const randomString = Math.random().toString(36).slice(-8); // generates a random 8-character string
+      const salt =  bcrypt.genSalt(10);
+      const hashed =  bcrypt.hash(randomString, salt);
+      
+  // generates a hash of the random string with the salt
+      
+    };
     console.log("creating new user");
     user = new User({
       name,
       email,
       username,
+      password: hashed,
     });
     await user.save();
   }
@@ -203,7 +212,6 @@ function authenticateToken(req, res, next) {
     next();
   });
 }
-
 // Start server
 app.listen(3002, () => {
   console.log('Server listening on port 3002...');
